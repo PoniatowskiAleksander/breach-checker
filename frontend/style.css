@@ -1,0 +1,19 @@
+/* Bazowy wygląd zapewnia Pico.css — tu tylko układ i rozmiar okienka */
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+main.container {
+  max-width: 640px;
+}
+
+article {
+  padding: 3rem;
+  font-size: 1.15rem;
+}
+
+#result:empty {
+  display: none;
+}

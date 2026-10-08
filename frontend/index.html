@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Breach Checker</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <article>
+      <hgroup>
+        <h1>Breach Checkerjjjjj</h1>
+        <p>Sprawdź, czy hasło pojawia się w znanej próbce wycieków.</p>
+      </hgroup>
+
+      <form id="check-form">
+        <label for="password">Hasło</label>
+        <input type="password" id="password" name="password" placeholder="Wpisz hasło do sprawdzenia" required>
+        <button type="submit">Sprawdź</button>
+      </form>
+
+      <p id="result"></p>
+
+      <footer><small>Wersja demonstracyjna — logika sprawdzania zostanie dodana w kolejnych laboratoriach.</small></footer>
+    </article>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
