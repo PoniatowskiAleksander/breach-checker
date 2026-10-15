@@ -12,6 +12,7 @@ main.container {
 article {
   padding: 3rem;
   font-size: 1.15rem;
+	background-color: green;
 }
 
 #result:empty {
