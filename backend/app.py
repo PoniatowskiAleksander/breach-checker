@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+import re
 
 # Plik z hashami SHA-1 (jeden na linię) - podłączany do kontenera przez bind mount
 HASHES_FILE = os.environ.get("HASHES_FILE", "/app/data/leaked-sha1.txt")
@@ -28,12 +29,21 @@ def check():
         return jsonify({"error": "brak pola 'hash'"}), 400
 
     h = str(data["hash"]).lower()
-    print(f"check: hash={h}", flush=True)
+    if not re.fullmatch(r"[0-9a-f]{40}", h):
+        return jsonify({"error": "niepoprawny format hasha"}), 400
+    print(f"check: hash={h[:5]}", flush=True)
 
     # TODO 1: sprawdź, czy h należy do zbioru KNOWN_HASHES (wynik zapisz w zmiennej found)
     found = h in KNOWN_HASHES
     # TODO 2: zwróć JSON {"found": found}
     return jsonify({'found': found})
+
+
+# @app.get('/health')
+# def health():
+#     return jsonify({"status": "ok"})
+    
+
 
 
 if __name__ == "__main__":
