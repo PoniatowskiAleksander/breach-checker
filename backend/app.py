@@ -39,9 +39,9 @@ def check():
     return jsonify({'found': found})
 
 
-# @app.get('/health')
-# def health():
-#     return jsonify({"status": "ok"})
+@app.get('/health')
+def health():
+    return jsonify({"status": "ok"})
     
 
 
