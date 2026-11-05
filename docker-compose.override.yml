@@ -1,0 +1,8 @@
+# Konfiguracja deweloperska - Compose dokłada ten plik automatycznie do docker-compose.yml
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev    # obraz z pytest, serwer Flask w trybie debug
+    volumes:
+      - ./backend:/app              # kod z hosta zamiast kodu z obrazu
