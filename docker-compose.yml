@@ -4,7 +4,8 @@ services:
     ports:
       - "8080:80"          # jedyny port opublikowany na hoście
     depends_on:
-      - backend            # nginx przy starcie musi znaleźć nazwę backend
+      backend:
+        condition: service_healthy          # nginx przy starcie musi znaleźć nazwę backend
 
   backend:
     build: ./backend
