@@ -1,18 +1,11 @@
 FROM python:3.12-slim
+# Użytkownik systemowy bez hasła i bez katalogu domowego - na nim działa aplikacja
+RUN useradd --system --no-create-home appuser
 WORKDIR /app
-
-# 1. skopiuj do obrazu plik requirements.txt
 COPY requirements.txt .
-# 2. zainstaluj zależności: pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-
-# 3. skopiuj do obrazu plik app.py
+# Kod należy do root - appuser może go czytać, ale nie może go zmienić
 COPY app.py .
-
+USER appuser
 EXPOSE 5000
-CMD ["python", "app.py"]
-
-
-
-
-# najpierw instalacja potem copy bo copy resetuje cache a nie chcemy pobierac za kazdym razem
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--no-control-socket", "app:app"]

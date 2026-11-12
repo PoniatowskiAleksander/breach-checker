@@ -1,3 +1,6 @@
-Dockerfile*
-.dockerignore
-__pycache__
+# Domyślnie nic nie trafia do kontekstu budowania...
+*
+# ...poza plikami wymienionymi poniżej
+!requirements.txt
+!requirements-dev.txt
+!app.py
