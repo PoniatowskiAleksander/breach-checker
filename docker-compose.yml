@@ -9,6 +9,16 @@ services:
 
   backend:
     build: ./backend
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+    tmpfs:
+      - /tmp
+
+
     environment:
       DB_HOST: db
       DB_NAME: ${POSTGRES_DB}
