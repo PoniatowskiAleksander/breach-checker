@@ -46,9 +46,25 @@ jobs:
       - name: Publikacja
         run: docker push --all-tags "$IMAGE"
 
+  build-frontend:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: Nazwa obrazu
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/breach-checker-frontend" >> "$GITHUB_ENV"
+      - name: Logowanie do GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - name: Budowanie obrazu produkcyjnego (z lintem)
+        run: docker build -t "$IMAGE:$GITHUB_SHA" frontend
+      - name: Publikacja
+        run: docker push "$IMAGE:$GITHUB_SHA"
+
 
   verify:
-    needs: build-and-push
+    needs: [build-and-push, build-frontend]
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -60,14 +76,17 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - name: Nazwa obrazu z tego commita
         run: echo "BACKEND_IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/breach-checker-backend:$GITHUB_SHA" >> "$GITHUB_ENV"
+      - name: Nazwa obrazu frontendu
+        run: echo "FRONTEND_IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/breach-checker-frontend:$GITHUB_SHA" >> "$GITHUB_ENV"
       - name: Logowanie do GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
       - name: Pobranie obrazu z rejestru
-        run: docker compose pull backend
+        run: docker compose pull backend frontend
       - name: Uruchomienie całego projektu
         run: docker compose up -d --wait
       - name: Test dymny - zapytania przez frontend, jak z przeglądarki
         run: |
+          curl --fail -sS http://localhost:8080/
           curl --fail -sS http://localhost:8080/api/health
           curl --fail -sS -X POST -H "Content-Type: application/json" \
             -d '{"hash":"7c4a8d09ca3762af61e59520943dc26494f8941b"}' \
