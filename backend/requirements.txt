@@ -1,3 +1,5 @@
 flask==3.1.2
 psycopg2-binary==2.9.10
 gunicorn==26.2.0
+redis==6.4.0
+requests==2.32.5
